@@ -1,181 +1,248 @@
+import datetime
+from datetime import timedelta
 import streamlit as st
 
-# إعدادات الصفحة وتصميم الواجهة
-st.set_page_config(
-    page_title="المساعد الذكي للتشخيص التفريقي - نساء وتوليد",
+# إعدادات صفحة التطبيق
+st.set_page_title_config = st.set_page_config(
+    page_title="المساعد الطبي الشامل - نساء وتوليد",
     page_icon="🩺",
-    layout="wide"
+    layout="wide",
 )
 
-# تنسيق الألوان والتصميم بستايل هادئ ومهني
-st.markdown("""
+# تصميم وتنسيق بصري احترافي للواجهة
+st.markdown(
+    """
     <style>
-    .main {
-        background-color: #f8f9fa;
+    .main-header {
+        font-size: 2.2rem;
+        color: #1E3A8A;
+        text-align: right;
+        font-weight: bold;
+        margin-bottom: 10px;
     }
-    .stButton>button {
-        background-color: #4b6cb7;
-        color: white;
-        border-radius: 8px;
-        padding: 10px 24px;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #182848;
-    }
-    h1, h2, h3 {
-        color: #2c3e50;
+    .sub-header {
+        font-size: 1.1rem;
+        color: #4B5563;
+        text-align: right;
+        margin-bottom: 25px;
     }
     .card {
-        background-color: white;
+        background-color: #F8FAFC;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
+        border-right: 5px solid #3B82F6;
+        margin-bottom: 15px;
+        text-align: right;
+    }
+    .alert-card {
+        background-color: #FEF2F2;
+        padding: 20px;
+        border-radius: 10px;
+        border-right: 5px solid #EF4444;
+        margin-bottom: 15px;
+        text-align: right;
     }
     </style>
-""", unsafe_allow_html=True)
-
-# عنوان التطبيق والشعار
-st.title("🩺 المساعد الذكي للتشخيص التفريقي (نساء وتوليد)")
-st.markdown("---")
-st.markdown("مرحباً بكِ دكتورة. هذا النظام مصمم لمساعدتكِ خطوة بخطوة في الوصول للتشخيص التفريقي السريع في الحالات الحرجة وطوارئ النساء والتوليد.")
-
-# القائمة الجانبية للتنقل بين الأقسام
-st.sidebar.header("📋 أقسام النظام")
-menu = st.sidebar.selectbox(
-    "اختر القسم:",
-    ["التشخيص التفريقي السريع", "حسابات الحمل والعمر الحملي", "دليل الأدوية والطوارئ", "إرشادات الاستخدام"]
+""",
+    unsafe_allow_html=True,
 )
 
-# ---------------- القسم الأول: التشخيص التفريقي السريع ----------------
-if menu == "التشخيص التفريقي السريع":
-    st.header("⚡ التشخيص التفريقي لحالات الطوارئ")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        symptom_category = st.selectbox(
-            "اختر العرض الرئيسي للمريضة:",
-            ["نزيف أول الحمل (First Trimester Bleeding)", 
-             "نزيف أواخر الحمل (Late Trimester Bleeding)", 
-             "آلام الحوض والبطن الحادة (Acute Abdominal Pain)", 
-             "ارتفاع ضغط الدم الحملي / تسمم الحمل (Hypertensive Disorders)"]
-        )
-    
-    with col2:
-        vital_signs = st.selectbox(
-            "حالة العلامات الحيوية (Hemodynamic Status):",
-            ["مستقرة (Stable)", "غير مستقرة / صدمة (Unstable / Shock)"]
-        )
+# القائمة الجانبية الاحترافية
+st.sidebar.markdown(
+    "<h2 style='text-align: right;'>📋 أقسام النظام</h2>", unsafe_allow_html=True
+)
+menu = st.sidebar.selectbox(
+    "اختر القسم:",
+    [
+        "🏠 الرئيسية",
+        "🚨 طوارئ النساء والتوليد (تشخيص تفريقي)",
+        "🧮 حاسبات الحمل والولادة",
+        "💊 دليل الأدوية والجرعات السريرية",
+        "📋 بروتوكولات الطوارئ (PPH & Pre-eclampsia)",
+    ],
+)
 
-    st.markdown("### 🔍 النتائج والتشخيص التفريقي المقترح:")
-    
-    if symptom_category == "نزيف أول الحمل (First Trimester Bleeding)":
-        st.markdown("""
-        <div class="card">
-        <ul>
-            <li><b>التشخيص المرجح 1:</b> حمل خارج الرحم (Ectopic Pregnancy) - <i>يجب استبعاده فوراً</i>.</li>
-            <li><b>التشخيص المرجح 2:</b> إجهاض منذر أو حتمي (Threatened / Inevitable Abortion).</li>
-            <li><b>التشخيص المرجح 3:</b> حمل باهت أو عنقودي (Molar Pregnancy).</li>
-        </ul>
-        <b>الخطوات الإكلينيكية المقترحة:</b> إجراء سونار فوري (Pelvic/Transvaginal Ultrasound)، فحص هرمون الحمل الكمي (Beta-hCG)، وفحص فصيلة الدم (Blood Group & Rh).
-        </div>
-        """, unsafe_allow_html=True)
-        
-    elif symptom_category == "نزيف أواخر الحمل (Late Trimester Bleeding)":
-        st.markdown("""
-        <div class="card">
-        <ul>
-            <li><b>التشخيص المرجح 1:</b> انفكاك المشيمة المبكر (Placental Abruption).</li>
-            <li><b>التشخيص المرجح 2:</b> المشيمة المتقدمة (Placenta Previa).</li>
-            <li><b>التشخيص المرجح 3:</b> تمزق الرحم (Uterine Rupture - خاصة مع وجود ندبة سابقة).</li>
-        </ul>
-        <b>الخطوات الإكلينيكية المقترحة:</b> تجنب الفحص المهني الداخلي (Digital Vaginal Examination) حتى يتم نفي المشيمة المتقدمة بالسونار، تقييم نبض الجنين (CTG)، وتأمين وريدين وتوفير وحدات دم.
-        </div>
-        """, unsafe_allow_html=True)
+# ---------------- 1. الصفحة الرئيسية ----------------
+if menu == "🏠 الرئيسية":
+  st.markdown(
+      '<div class="main-header">🩺 المساعد الذكي الشامل (نساء وتوليد)</div>',
+      unsafe_allow_html=True,
+  )
+  st.markdown(
+      '<div class="sub-header">نظام مرجعي وسريري متقدم مصمم لدعم الطبيبات في اتخاذ القرارات الطبية الحرجة والسريعة.</div>',
+      unsafe_allow_html=True,
+  )
 
-    elif symptom_category == "آلام الحوض والبطن الحادة (Acute Abdominal Pain)":
-        st.markdown("""
-        <div class="card">
-        <ul>
-            <li><b>التشخيص المرجح 1:</b> التواء كيس المبيض (Ovarian Torsion).</li>
-            <li><b>التشخيص المرجح 2:</b> التهاب الزائدة الدودية الحاد (Acute Appendicitis).</li>
-            <li><b>التشخيص المرجح 3:</b> انقباضات الرحم المبكرة أو المخاض المبكر.</li>
-        </ul>
-        <b>الخطوات الإكلينيكية المقترحة:</b> فحص دوبلر للمبيضين بالسونار، تحليل بول، وتحليل صورة دم كاملة (CBC).
-        </div>
-        """, unsafe_allow_html=True)
+  col1, col2, col3 = st.columns(3)
+  with col1:
+    st.info("🚨 **التشخيص الطارئ**\n\nتقييم فوري للحالات الحرجة والنزيف.")
+  with col2:
+    st.success("🧮 **حاسبات الحمل**\n\nحساب أسابيع الحمل والولادة بدقة.")
+  with col3:
+    st.warning("💊 **دليل الأدوية**\n\nالجرعات وتصنيفات الأمان السريرية.")
 
-    else:
-        st.markdown("""
-        <div class="card">
-        <ul>
-            <li><b>التشخيص المرجح 1:</b> تسمم الحمل الشديد (Severe Preeclampsia).</li>
-            <li><b>التشخيص المرجح 2:</b> متلازمة هيلب (HELLP Syndrome).</li>
-            <li><b>التشخيص المرجح 3:</b> تسمم الحمل المزمن المتفاقم.</li>
-        </ul>
-        <b>الخطوات الإكلينيكية المقترحة:</b> قياس ضغط الدم بدقة، فحص الزلال في البول (Proteinuria)، طلب تحاليل وظائف كبد وكلي وتعداد صفائح دموية (Platelets)، وبدء بروتوكول كبريتات المغنيسيوم (MgSO4) عند الحاجة.
-        </div>
-        """, unsafe_allow_html=True)
+  st.write("---")
+  st.markdown(
+      "### 💡 مرحباً بكِ دكتورة. استخدمي القائمة الجانبية للتنقل بين أقسام التطبيق المختلفة."
+  )
 
-# ---------------- القسم الثاني: حسابات الحمل ----------------
-elif menu == "حسابات الحمل والعمر الحملي":
-    st.header("📅 حاسبة العمر الحملي وموعد الولادة المتوقع")
-    
-    import datetime
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        lmp_date = st.date_input("تاريخ آخر دوره menstruation (LMP):", datetime.date.today() - datetime.timedelta(days=90))
-        
-    if lmp_date:
-        today = datetime.date.today()
-        delta = today - lmp_date
-        total_days = delta.days
-        weeks = total_days // 7
-        days = total_days % 7
-        
-        edd = lmp_date + datetime.timedelta(days=280)
-        
-        with col2:
-            st.markdown(f"""
+# ---------------- 2. طوارئ النساء والتوليد ----------------
+elif menu == "🚨 طوارئ النساء والتوليد (تشخيص تفريقي)":
+  st.markdown(
+      '<div class="main-header">🚨 طوارئ النساء والتوليد والتشخيص التفريقي</div>',
+      unsafe_allow_html=True,
+  )
+
+  emergency_type = st.selectbox(
+      "اختر العرض السريري الرئيسي للمريضة:",
+      [
+          "نزيف أول الحمل (First Trimester Bleeding)",
+          "آلام البطن الحادة في الحمل (Acute Abdomen)",
+          "ارتفاع ضغط الدم وتسمم الحمل (Pre-eclampsia/Eclampsia)",
+          "نزيف ما بعد الولادة (Postpartum Hemorrhage)",
+      ],
+  )
+
+  if emergency_type == "نزيف أول الحمل (First Trimester Bleeding)":
+    st.markdown(
+        """
+        <div class="alert-card">
+        <h3>🔍 التشخيصات التفريقية المحتملة:</h3>
+        <ul>
+            <li><b>الإجهاض المنذر (Threatened Abortion):</b> عمر الحمل متوافق، العنق مغلق، نبض الجنين موجود.</li>
+            <li><b>الحمل خارج الرحم (Ectopic Pregnancy):</b> ألم حاد، نزيف خفيف، اختبار قحفي إيجابي مع عدم رؤية كيس داخل الرحم بالسونار.</li>
+            <li><b>الإجهاض الحتمي أو غير الكامل (Inevitable/Incomplete Abortion):</b> عنق الرحم مفتوح، نزيف مصحوب بقطع نسيجية.</li>
+            <li><b>الحمل العنقودي (Molar Pregnancy):</b> رحم أكبر من عمر الحمل، غثيان شديد، مظهر "عاصفة الثلج" بالسونار.</li>
+        </ul>
+        <h3>⚡ خطوات التدخل العاجل:</h3>
+        <ol>
+            <li>تقييم العلامات الحيوية فوراً (استبعاد الصدمة النزفية).</li>
+            <li>طلب تحليل (Blood Group & Rh, CBC, Quantitative hCG).</li>
+            <li>إجراء تصوير تلفزيوني (Pelvic Ultrasound).</li>
+        </ol>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+  elif emergency_type == (
+      "ارتفاع ضغط الدم وتسمم الحمل (Pre-eclampsia/Eclampsia)"
+  ):
+    st.markdown(
+        """
+        <div class="alert-card">
+        <h3>🔍 التشخيصات والتقييم السريري:</h3>
+        <ul>
+            <li><b>تسمم الحمل بدون علامات خطورة:</b> ضغط ≥ 140/90 مع وجود بروتين في البول (Proteinuria).</li>
+            <li><b>تسمم الحمل بعلامات خطورة (Severe Features):</b> ضغط ≥ 160/110، صداع شديد، زغللة في العين، ألم الشرسوف، نقص صفائح الدم.</li>
+            <li><b>الإرجاج (Eclampsia):</b> حدوث نشنات تشنجية (Seizures) مع علامات تسمم الحمل.</li>
+        </ul>
+        <h3>⚡ الخطوات الإسعافية:</h3>
+        <ol>
+            <li>البدء الفوري بمحلول كبريتات المغنيسيوم (MgSO4) للوقاية من التشنجات.</li>
+            <li>خفض الضغط الحاد بأدوية آمنة (Labetalol أو Nifedipine).</li>
+            <li>تقييم وضع الجنين وتحديد توقيت التوليد.</li>
+        </ol>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+  else:
+    st.info(
+        "جاري استعراض البروتوكول السريري لهذه الحالة وتحديث خوارزميات التدخل"
+        " السريع..."
+    )
+
+# ---------------- 3. حاسبات الحمل والولادة ----------------
+elif menu == "🧮 حاسبات الحمل والولادة":
+  st.markdown(
+      '<div class="main-header">🧮 الحاسبة السريرية للحمل والولادة</div>',
+      unsafe_allow_html=True,
+  )
+
+  calc_mode = st.radio(
+      "اختر طريقة الحساب:",
+      ["تاريخ آخر دورة شهرية (LMP)", "تقدير عمر الحمل بالأسابيع الحالية"],
+  )
+
+  if calc_mode == "تاريخ آخر دورة شهرية (LMP)":
+    lmp_date = st.date_input(
+        "أدخل تاريخ أول يوم من آخر دورة شهرية (LMP):",
+        datetime.date.today() - timedelta(weeks=12),
+    )
+
+    if st.button("احسب التفاصيل السريرية"):
+      today = datetime.date.today()
+      gestational_days = (today - lmp_date).days
+      weeks = gestational_days // 7
+      days = gestational_days % 7
+
+      edd = lmp_date + timedelta(days=280)
+
+      st.markdown(
+          f"""
             <div class="card">
-            <h4>نتائج الحساب:</h4>
-            <p><b>العمر الحملي الحالي:</b> {weeks} أسبوع و {days} أيام</p>
-            <p><b>موعد الولادة المتوقع (EDD):</b> {edd.strftime('%Y-%m-%d')}</p>
+            <h3>📊 النتائج السريرية:</h3>
+            <p><b>عمر الحمل الحالي:</b> {weeks} أسبوع و {days} أيام.</p>
+            <p><b>تاريخ الولادة المتوقع (EDD):</b> {edd.strftime('%Y-%m-%d')}</p>
+            <p><b>الثلث الحالي من الحمل:</b> {'الثلث الأول' if weeks <= 13 else ('الثلث الثاني' if weeks <= 27 else 'الثلث الثالث')}</p>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+          unsafe_allow_html=True,
+      )
 
-# ---------------- القسم الثالث: دليل الأدوية والطوارئ ----------------
-elif menu == "دليل الأدوية والطوارئ":
-    st.header("💊 دليل الأدوية والجرعات السريعة")
-    
-    drug_search = st.text_input("ابحث عن اسم الدواء أو التصنيف العلاجي:", "")
-    
-    drugs_data = [
-        {"name": "Magnesium Sulfate (كبريتات المغنيسيوم)", "category": "مضادات الاختلاج / تسمم الحمل", "dose": "جرعة تحميلية 4-6 جرام وريدي ببطء، ثم 1-2 جرام/ساعة مستمر."},
-        {"name": "Oxytocin (أوكسيتوسين)", "category": "مقويات الرحم / تحفيز المخاض", "dose": "10-20 وحدة في محلول وريدي لتنظيم التقلصات ومنع النزيف التالي للوضع."},
-        {"name": "Labetalol (لابيتالول)", "category": "خافض ضغط الدم في الحمل", "dose": "20-40 ملغ وريدي، يمكن تكرارها عند الحاجة لارتفاع الضغط الحاد."},
-        {"name": "Tranexamic Acid (حمض الترانيكساميك)", "category": "موقف للنزيف", "dose": "1 جرام وريدي ببطء في حالات نزيف ما بعد الولادة (PPH)."}
-    ]
-    
-    for drug in drugs_data:
-        if drug_search.lower() in drug["name"].lower() or drug_search.lower() in drug["category"].lower() or drug_search == "":
-            st.markdown(f"""
-            <div class="card">
-            <h4>{drug['name']}</h4>
-            <p><b>التصنيف:</b> {drug['category']}</p>
-            <p><b>الجرعة الإكلينيكية الشائعة:</b> {drug['dose']}</p>
-            </div>
-            """, unsafe_allow_html=True)
+# ---------------- 4. دليل الأدوية والجرعات ----------------
+elif menu == "💊 دليل الأدوية والجرعات السريرية":
+  st.markdown(
+      '<div class="main-header">💊 دليل أدوية النساء والتوليد والجرعات</div>',
+      unsafe_allow_html=True,
+  )
 
-# ---------------- القسم الرابع: إرشادات الاستخدام ----------------
-else:
-    st.header("ℹ️ إرشادات الاستخدام")
-    st.markdown("""
-    <div class="card">
-    <p>هذا التطبيق مصمم ليكون أداة مساعدة سريعة (Decision Support Tool) للطبيبة والكوادر الطبية في سرعة تقييم الحالات واتخاذ القرار السريري.</p>
-    <p><b>ملاحظة هامة:</b> لا يُغنى هذا التطبيق عن الفحص السريري المباشر والتقدير الطبي الشخصي للحالة وفقاً للبروتوكولات المعتمدة في المستشفى.</p>
+  drug_category = st.selectbox(
+      "تصنيف الأدوية:",
+      [
+          "أدوية تحفيز الطلق والرحم (Uterotonics)",
+          "مخفضات ضغط الدم الآمنة في الحمل",
+          "المضادات الحيوية الآمنة في الحمل",
+      ],
+  )
+
+  if drug_category == "أدوية تحفيز الطلق والرحم (Uterotonics)":
+    st.markdown(
+        """
+        <div class="card">
+        <h3>1. الأوكسيتوسين (Oxytocin):</h3>
+        <p><b>الاستخدام:</b> تحريض الولادة، الوقاية والعلاج من نزيف ما بعد الولادة (PPH).</p>
+        <p><b>الجرعة للتحريض:</b> 1 مิลلي وحدة/دقيقة وتُضاعف كل 30 دقيقة حسب الاستجابة.</p>
+        <p><b>الجرعة للوقاية من PPH:</b> 10 وحدات عضلياً (IM) أو وريدياً ببطء بعد خروج الجنين.</p>
+        </div>
+        <div class="card">
+        <h3>2. ميثيل إرغometrine (Methergine):</h3>
+        <p><b>الاستخدام:</b> علاج نزيف ما بعد الولادة الناتج عن رخاوة الرحم (Atonic PPH).</p>
+        <p><b>الجرعة:</b> 0.2 ملغ عضلياً (IM). <b>تحذير صارم:</b> يمنع منعاً باتاً استخدامه للمريضات اللاتي يعانين من ارتفاع ضغط الدم.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ---------------- 5. بروتوكولات الطوارئ ----------------
+elif menu == "📋 بروتوكولات الطوارئ (PPH & Pre-eclampsia)":
+  st.markdown(
+      '<div class="main-header">📋 قوائم التدقيق وبروتوكولات الطوارئ</div>',
+      unsafe_allow_html=True,
+  )
+  st.markdown(
+      """
+    <div class="alert-card">
+    <h3>🚨 بروتوكول التعامل الفوري مع نزيف ما بعد الولادة (PPH Checklist)</h3>
+    <ol>
+        <li><b>استدعاء المساعدة الطبية:</b> إبلاغ أخصائي التوليد، طبيب التخدير، وفريق التمريض فوراً.</li>
+        <li><b>تدليك الرحم (Uterine Massage):</b> إجراء تدليك خارجي مستمر لتحفيز انقباض الرحم.</li>
+        <li><b>الأدوية القابضة للرحم (Uterotonics):</b> إعطاء Oxytocin و Misoprostol و Methergine (مع مراعاة موانع الاستعمال).</li>
+        <li><b>الوصول الوريدي (IV Access):</b> تركيب كانولا واسعة الحجم وبدء المحاليل الوريدية الدافئة.</li>
+        <li><b>تقدير كمية النزيف:</b> قياس الدم المفقود بدقة ومراقبة العلامات الحيوية كل 5 دقائق.</li>
+    </ol>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+      unsafe_allow_html=True,
+  )
