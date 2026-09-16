@@ -1,252 +1,202 @@
+import datetime
 import streamlit as st
 
 # إعدادات صفحة التطبيق
 st.set_page_config(
-    page_title="OB/GYN Smart Assistant / المساعد الذكي",
+    page_title="المساعد الذكي لعيادة النساء والولادة - Dr. Aziza",
     page_icon="🩺",
     layout="wide",
-    initial_sidebar_state="expanded"
 )
 
-# اختيار اللغة من الشريط الجانبي
-language = st.sidebar.selectbox(
-    "🌐 Choose Language / اختر اللغة", 
-    ["العربية", "English"]
+# العنوان الرئيسي للواجهة
+st.title("🩺 المساعد الذكي لعيادة النساء والولادة والتوليد")
+st.markdown(
+    "--- \n نظام إكلينيكي مساعد لإدارة الحسابات، الأدوية، والفحوصات الطبية."
 )
 
-# القواميس النصية الشاملة حسب اللغة المختارة
-if language == "العربية":
-    t = {
-        "title": "🩺 المساعد الذكي للتشخيص التفريقي (نساء وولادة)",
-        "subtitle": "نظام دعم القرار السريري الشامل للحالات الطارئة والتشخيص التفريقي",
-        "sidebar_header": "إعدادات وتقييم الحالة الإكلينيكية",
-        "category_label": "اختر ففة العرض الإكلينيكي:",
-        "categories": [
-            "نزيف أول الحمل (First Trimester Bleeding)",
-            "آلام البطن والحوض الحادة (Acute Abdominal/Pelvic Pain)",
-            "اضطرابات ضغط الدم الحملي (Hypertensive Disorders in Pregnancy)",
-            "نزيف ما بعد الولادة (Postpartum Hemorrhage - PPH)",
-            "الحمى والعدوى النفاسية أو الحوضية (Puerperal / Pelvic Infections)",
-            "اضطرابات حركة الجنين أو تخطيطه (Fetal Movement / CTG Concerns)"
-        ],
-        "analyze_btn": "🔍 بدء التحليل الإكلينيكي الشامل",
-        "results_header": "📋 نتائج التشخيص التفريقي والإدارة الطبية",
-        "differential": "التشخيص التفريقي المحتمل:",
-        "investigations": "الفحوصات المطلوبة (Investigations):",
-        "management": "خطة الإدارة الطبية الطارئة والتدخل (Management):",
-        "warning": "⚠️ تنبيه طبي: هذا النظام هو أداة مساعدة لدعم القرار الإكلينيكي ولا يغني عن التقييم السريري المباشر والخبرة الطبية.",
-        "select_prompt": "الرجاء تحديد الفئة والأعراض الإكلينيكية من القائمة الجانبية ثم الضغط على زر التحليل للبدء."
-    }
-else:
-    t = {
-        "title": "🩺 OB/GYN Smart Differential Diagnosis Assistant",
-        "subtitle": "Comprehensive Clinical Decision Support System for Emergency & Differential Diagnosis",
-        "sidebar_header": "Clinical Case Settings & Evaluation",
-        "category_label": "Select Clinical Presentation Category:",
-        "categories": [
-            "First Trimester Bleeding",
-            "Acute Abdominal/Pelvic Pain",
-            "Hypertensive Disorders in Pregnancy",
-            "Postpartum Hemorrhage - PPH",
-            "Puerperal / Pelvic Infections",
-            "Fetal Movement / CTG Concerns"
-        ],
-        "analyze_btn": "🔍 Start Comprehensive Clinical Analysis",
-        "results_header": "📋 Differential Diagnosis & Clinical Management Results",
-        "differential": "Potential Differential Diagnosis:",
-        "investigations": "Required Investigations:",
-        "management": "Emergency Management & Intervention Plan:",
-        "warning": "⚠️ Medical Disclaimer: This system is a clinical decision support tool and does not replace direct clinical evaluation and medical expertise.",
-        "select_prompt": "Please select the category and clinical symptoms from the sidebar, then click the analysis button to begin."
-    }
+# القائمة الجانبية للتنقل بين الأقسام مع إضافة اسم الطبيبة تحت قسم الاختيار
+st.sidebar.markdown("### 👩‍⚕️ **Dr. aziza mohmmed**")
+st.sidebar.markdown("---")
 
-# عنوان التطبيق
-st.title(t["title"])
-st.markdown(f"*{t['subtitle']}*")
-st.divider()
+menu = st.sidebar.selectbox(
+    "اختر القسم المطلوب:",
+    [
+        "1. التشخيص التفريقي للحالات الطارئة",
+        "2. حسابات فترة العمل والحمل",
+        "3. دليل الأدوية والمكملات الآمنة للحامل",
+        "4. الفحوصات المخبرية والأشعة التلفزيونية",
+    ],
+)
 
-# الشريط الجانبي للإدخال
-st.sidebar.header(t["sidebar_header"])
-selected_category = st.sidebar.selectbox(t["category_label"], t["categories"])
+# --- القسم الأول: التشخيص التفريقي للحالات الطارئة ---
+if menu == "1. التشخيص التفريقي للحالات الطارئة":
+  st.header("🚨 التشخيص التفريقي للحالات الطارئة (Emergency OB/GYN)")
 
-# تفاصيل إضافية حسب الفئة المختارة بكامل الأقسام
-symptom_details = ""
-if "First Trimester" in selected_category or "نزيف أول الحمل" in selected_category:
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("الأعراض والعلامات المصاحبة:", [
-            "ألم شديد في البطن/الحوض (Severe Pain)", 
-            "نزيف مستمر مع قطع نسجية (Tissue Passage)", 
-            "دوخة أو إغماء / صدمة (Dizziness / Shock)", 
-            "غياب نبض الجنين بالسونار (Absent Fetal Heartbeat)",
-            "نزيف خفيف متقطع مع مغص خفيف (Spotting/Mild Cramps)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Associated Symptoms & Signs:", [
-            "Severe abdominal/pelvic pain", 
-            "Ongoing bleeding with tissue passage", 
-            "Dizziness or fainting / Shock", 
-            "Absent fetal heartbeat on ultrasound",
-            "Light intermittent bleeding with mild cramps"
-        ])
+  emergency_type = st.selectbox(
+      "اختر العَرَض الرئيسي أو الحالة:",
+      [
+          "النزيف في الثلث الأول من الحمل (First Trimester Bleeding)",
+          "آلام البطن الحادة (Acute Abdomen)",
+          (
+              "ارتفاع ضغط الدم المرتبط بالحمل (Hypertensive"
+              " Disorders/Preeclampsia)"
+          ),
+      ],
+  )
 
-elif "Abdominal" in selected_category or "آلام البطن" in selected_category:
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("الأعراض والعلامات المصاحبة:", [
-            "تأخر الدورة + اختبار حمل إيجابي (Missed Period + +ve Test)", 
-            "حمى واهتزاز / غثيان (Fever / Chills / Nausea)", 
-            "ألم في الكتف / تهيج بريتوني (Shoulder Tip Pain / Peritonism)", 
-            "كتلة ملحقة بالحوض محسوسة أو مؤلمة (Adnexal Mass / Tenderness)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Associated Symptoms & Signs:", [
-            "Missed period + positive pregnancy test", 
-            "Fever and chills / Nausea", 
-            "Shoulder tip pain / Peritoneal irritation", 
-            "Palpable or tender adnexal mass"
-        ])
+  if emergency_type == "النزيف في الثلث الأول من الحمل (First Trimester Bleeding)":
+    st.markdown("""
+        ### **الخطوات الإكلينيكية والتشخيص التفريقي:**
+        1. **التقييم السريع للحالة (Hemodynamic stability):** فحص الضغط والنبض فوراً.
+        2. **الأسباب المحتملة:**
+           * الإجهاض المنذر أو المكتمل/غير المكتمل (Threatened/Inevitable Abortion).
+           * الحمل خارج الرحم (Ectopic Pregnancy) - *حالة خطيرة يجب استبعادها*.
+           * الحمل العنقودي (Molar Pregnancy).
+        3. **الفحوصات المطلوبة:** 
+           * أشعة تلفزيونية (Pelvic/Transvaginal Ultrasound).
+           * تحليل هرمون الحمل الكمي (Beta-hCG) و صورة دم كاملة (CBC) + فصيلة الدم (Blood Group & Rh).
+        """)
 
-elif "Hypertensive" in selected_category or "اضطرابات ضغط الدم" in selected_category:
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("العلامات والأعراض المصاحبة:", [
-            "ضغط الدم >= 140/90 (بشكل متكرر)", 
-            "صداع شديد أو زغللة في العيون (Severe Headache / Visual Disturbances)", 
-            "ألم في المراس العلوي الأيمن / شرسوفي (RUQ / Epigastric Pain)", 
-            "انتفاخ مفاجئ وذمة في الوجه والأطراف (Sudden Generalized Edema)",
-            "نقص الصفائح أو ارتفاع انزيمات الكبد (HELLP features)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Associated Signs & Symptoms:", [
-            "Blood Pressure >= 140/90 (persistent)", 
-            "Severe headache or visual disturbances", 
-            "Right upper quadrant (RUQ) / Epigastric pain", 
-            "Sudden facial/peripheral edema",
-            "Thrombocytopenia or elevated liver enzymes (HELLP features)"
-        ])
+  elif emergency_type == "آلام البطن الحادة (Acute Abdomen)":
+    st.markdown("""
+        ### **التشخيص التفريقي والتقييم:**
+        1. **أسباب متعلقة بالحمل:** الحمل خارج الرحم، انفجار كيس المبيض، انفتال المبيض (Ovarian Torsion)، الإجهاض المهدد.
+        2. **أسباب جراحية/أخرى:** التهاب الزائدة الدودية الحاد (Appendicitis)، حصوات الكلى، التهاب المسالك البولية.
+        3. **الخطوات:** فحص سريري دقيق، أشعة تلفزيونية دوبلر للاطمئنان على تدفق الدم للمبايض، وتحاليل مخبرية (CBC, Urinalysis).
+        """)
 
-elif "PPH" in selected_category or "نزيف ما بعد الولادة" in selected_category:
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("تفاصيل حالة النزيف:", [
-            "رحم طري وغير متقبض تماماً (Boggy / Atonic Uterus)", 
-            "نزيف بغزارة شديدة بعد الولادة مباشرة (Massive Immediate Bleeding)", 
-            "وجود تمزقات في المهبل أو عنق الرحم (Genital Tract Lacerations)", 
-            "شكوك حول وجود بقايا مشيمية داخل الرحم (Retained Placental Tissue)",
-            "صدمة وعائية / انخفاض حاد بالضغط (Hypovolemic Shock)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Bleeding Details & Clinical Signs:", [
-            "Boggy / completely atonic uterus", 
-            "Massive heavy bleeding immediately post-delivery", 
-            "Genital tract lacerations (cervical/vaginal)", 
-            "Suspected retained placental tissues",
-            "Hypovolemic shock / sharp BP drop"
-        ])
+  elif (
+      emergency_type
+      == "ارتفاع ضغط الدم المرتبط بالحمل (Hypertensive Disorders/Preeclampsia)"
+  ):
+    st.markdown("""
+        ### **التعامل السريع:**
+        1. **القياسات:** فحص ضغط الدم المتكرر، تحليل زلال البول (Proteinuria).
+        2. **علامات الخطر (Severe Features):** صداع شديد، زغللة في العيون، ألم في المراس العلوي الأيمن (Right upper quadrant pain).
+        3. **الإجراءات:** تقييم وضع الجنين (NST/Ultrasound) وتحويل المستشفى إذا لزم الأمر عند ظهور علامات التسمم الحملي الشديد.
+        """)
 
-elif "Infections" in selected_category or "الحمى والعدوى" in selected_category:
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("أعراض العدوى:", [
-            "ارتفاع حرارة الجسم > 38 درجة (Fever > 38°C)", 
-            "إفرازات مهبلية ذات رائحة كريهة (Foul-smelling Lochia / Discharge)", 
-            "ألم رحمي مضغوط أو حساسية في البطن (Uterine Tenderness)", 
-            "أعراض بولية / حرقان (Dysuria / Urinary Symptoms)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Infection Symptoms:", [
-            "Elevated body temperature > 38°C", 
-            "Foul-smelling lochia or vaginal discharge", 
-            "Uterine tenderness or lower abdominal pain", 
-            "Dysuria / urinary tract symptoms"
-        ])
 
-else:  # Fetal Movement / CTG Concerns
-    if language == "العربية":
-        symptom_details = st.sidebar.multiselect("ملاحظات الجنين:", [
-            "نقص أو انعدام حركة الجنين الملحوظة (Decreased / Absent Fetal Movements)", 
-            "تخطيط قلب الجنين غير مطمئن / تباطؤات (Non-reassuring CTG / Decelerations)", 
-            "قلة السائل الامينوسي المكتشفة بالسونار (Oligohydramnios)",
-            "تأخر نمو الجنين داخل الرحم (IUGR suspicion)"
-        ])
-    else:
-        symptom_details = st.sidebar.multiselect("Fetal Status Observations:", [
-            "Decreased or absent fetal movements", 
-            "Non-reassuring CTG / decelerations", 
-            "Oligohydramnios on ultrasound",
-            "Suspected Intrauterine Growth Restriction (IUGR)"
-        ])
+# --- القسم الثاني: حسابات فترة العمل والحمل ---
+elif menu == "2. حسابات فترة العمل والحمل":
+  st.header("📅 حسابات فترة العمل وعمر الحمل (Work & Pregnancy Calculations)")
 
-analyze_clicked = st.sidebar.button(t["analyze_btn"], type="primary")
+  col1, col2 = st.columns(2)
+  with col1:
+    lmp_date = st.date_input(
+        "تاريخ آخر دورة شهرية (LMP):",
+        value=datetime.date.today() - datetime.timedelta(days=70),
+    )
 
-# عرض النتائج عند الضغط على زر التحليل
-if analyze_clicked:
-    st.subheader(t["results_header"])
-    
-    # محتوى النتائج الشامل بناءً على الفئة المختارة واللغة
-    if "First Trimester" in selected_category or "نزيف أول الحمل" in selected_category:
-        if language == "العربية":
-            diff = "- حمل خارج الرحم (Ectopic Pregnancy - يجب استبعاده أولاً)\n- إجهاض منذر، حتمي، غير كامل، أو منساق (Abortions spectrum)\n- الحمل العنقودي / الغشائي (Gestational Trophoblastic Disease)\n- نزيف انغراس البويضة أو أسباب عنق الرحم الحميدة"
-            inv = "- فحص هرمون الحمل الكمي الرقمي (Quantitative Beta-hCG)\n- تصوير بالموجات فوق الصوتية عبر المهبل (Transvaginal Ultrasound - TVS)\n- صورة دم كاملة (CBC)، فصيلة الدم وعامل ريسوس (Blood Group & Rh)\n- تحديد جاهزية الدم للنقل عند الحاجة"
-            mgmt = "- إنعاش السوائل الوريدية وتقييم الاستقرار الديموديناميكي (Hemodynamic stability)\n- التدخل الجراحي الفوري (تنظير بطن أو استكشاف) في حالات اشتباه انفجار الحمل خارج الرحم\n- إعطاء حقنة المضاد ريسوس (Anti-D Immunoglobulin) خلال 72 ساعة للأمهات Rh سلبيات\n- الاستشارة والمتابعة النفسية والسريرية"
-        else:
-            diff = "- Ectopic Pregnancy (Must be ruled out urgently)\n- Abortion spectrum (Threatened, Inevitable, Incomplete, Missed)\n- Gestational Trophoblastic Disease (Molar Pregnancy)\n- Implantation bleeding or benign cervical lesions"
-            inv = "- Quantitative Beta-hCG\n- Transvaginal Ultrasound (TVS)\n- Complete Blood Count (CBC) & Blood Group and Rh\n- Type and screen/crossmatch if needed"
-            mgmt = "- IV fluid resuscitation and hemodynamic stability assessment\n- Urgent surgical intervention (laparoscopy/laparotomy) if ruptured ectopic is suspected\n- Administer Anti-D Immunoglobulin within 72 hours for Rh-negative mothers\n- Clinical counseling and follow-up"
-            
-    elif "Abdominal" in selected_category or "آلام البطن" in selected_category:
-        if language == "العربية":
-            diff = "- التهاب الزائدة الدودية الحاد (Acute Appendicitis - يتغير مكانها بالحمل)\n- التواء المبيض أو الأنبوب (Ovarian/Adnexal Torsion)\n- تمزق أو نزيف كيس المبيض (Ruptured Ovarian Cyst)\n- التهاب الحوض الحاد أو تفاقم حصوات المرارة/الكلى"
-            inv = "- سونار دوبلر حوضي وبطني (Pelvic & Abdominal Doppler US)\n- صورة دم كاملة (CBC)، تحليل بول (Urinalysis)، ووظائف الكلى\n- استشارة جراحية مبكرة عند الشك في جراحة بطنية حادة"
-            mgmt = "- السيطرة على الألم، الإماهة الوريدية الموجهة، والمراقبة السريرية الحثيثة\n- التدخل الجراحي/النسائي العاجل بناءً على نتائج الدوبلر، العلامات البريتونية، والتقييم الإكلينيكي"
-        else:
-            diff = "- Acute Appendicitis (position alters during pregnancy)\n- Ovarian or Adnexal Torsion\n- Ruptured or Hemorrhagic Ovarian Cyst\n- Pelvic Inflammatory Disease (PID) or acute biliary/renal colic"
-            inv = "- Pelvic & Abdominal Doppler Ultrasound\n- Complete Blood Count (CBC), Urinalysis, Renal Profile\n- Early surgical consultation if acute abdomen is suspected"
-            mgmt = "- Pain control, targeted IV hydration, and close clinical observation\n- Urgent surgical/GYN intervention based on Doppler flow findings, peritoneal signs, and diagnostic scores"
-            
-    elif "Hypertensive" in selected_category or "اضطرابات ضغط الدم" in selected_category:
-        if language == "العربية":
-            diff = "- تسمم الحمل (Pre-eclampsia) بعلامات خطورة أو بدونها\n- ارتفاع ضغط الدم المزمن أو الحملي العابر\n- متلازمة هيلپ (HELLP Syndrome)\n- تشنج الحمل (Eclampsia)"
-            inv = "- فحص زلال البول (Spot Urine Protein-to-Creatinine Ratio أو جمع بول 24 ساعة)\n- وظائف الكبد والكلى (AST, ALT, Serum Creatinine, Bilirubin)\n- تعداد الصفائح الدموية واختبارات التخثر\n- تقييم صحة الجنين (NST وسونار قياس السوائل ونمو الجنين)"
-            mgmt = "- بدء خافضات ضغط الدم السريعة (مثل Labetalol أو Nifedipine oral) إذا كان الضغط >= 160/110 مم زئبق\n- إعطاء كبريتات المغنيسيوم (MgSO4) للوقاية أو علاج التشنجات في حالات تسمم الحمل الشديد\n- تحديد توقيت وطريقة الولادة المثلى بناءً على عمر الحمل واستقرار الحالة الأمومية والجنينية"
-        else:
-            diff = "- Pre-eclampsia (with or without severe features)\n- Chronic or Gestational Hypertension\n- HELLP Syndrome\n- Eclampsia"
-            inv = "- Urine protein evaluation (Spot Protein/Creatinine Ratio or 24-hr collection)\n- Liver and renal function tests (AST, ALT, Creatinine, Bilirubin)\n- Platelet count and coagulation profile\n- Fetal well-being assessment (NST, biophysical profile)"
-            mgmt = "- Administer acute antihypertensives (e.g., Labetalol or Nifedipine) if BP >= 160/110 mmHg\n- Administer Magnesium Sulfate (MgSO4) for seizure prophylaxis/treatment in severe pre-eclampsia\n- Determine optimal timing and mode of delivery based on gestational age and maternal/fetal stability"
-            
-    elif "PPH" in selected_category or "نزيف ما بعد الولادة" in selected_category:
-        if language == "العربية":
-            diff = "- ارتخاء الرحم (Uterine Atony - يمثل نحو 70-80% من الحالات)\n- بقايا الأنسجة المشيمية أو المشيمة الملتصقة (Retained/Accreta Placenta)\n- تمزقات قناة الولادة والأنسجة الرخوة (Genital Tract Lacerations)\n- انخفاض عوامل التخثر أو الخثارة الدموية (Coagulopathy)"
-            inv = "- قياس العلامات الحيوية بشكل متسارع وتقدير حجم الدم المفقود بدقة\n- فحص سريري دقيق (تقييم قوام الرحم، فحص عنق الرحم والمهبل والمشيمة الخارجة)\n- فحوصات مخبرية فورية (CBC, Coagulation Profile: PT/INR, Fibrinogen)"
-            mgmt = "- تطبيق تدليك الرحم ثنائي الجانب الفوري (Bimanual uterine massage)\n- إعطاء الأدوية القابضة للرحم المتسلسلة (Oxytocin infusion, Ergometrine, Carboprost, Misoprostol)\n- إدخال قسطرة بولية لضمان تفراغ المثانة وتحسين انقباض الرحم\n- تفعيل بروتوكول نقل الدم الضخم واستدعاء فريق الطوارئ المتعدد التخصصات"
-        else:
-            diff = "- Uterine Atony (accounts for 70-80% of cases)\n- Retained placental tissue or morbidly adherent placenta\n- Genital tract lacerations and soft tissue trauma\n- Coagulation disorders and DIC"
-            inv = "- Rapid vital signs monitoring and objective blood loss estimation\n- Careful clinical examination (uterine tone, inspection of cervix, vagina, and placenta)\n- Immediate lab tests (CBC, Coagulation profile: PT/INR, Fibrinogen)"
-            mgmt = "- Perform immediate bimanual uterine massage\n- Administer sequential uterotonic agents (Oxytocin infusion, Ergometrine, Carboprost, Misoprostol)\n- Insert Foley catheter for bladder drainage and monitoring\n- Activate Massive Transfusion Protocol (MTP) and call multidisciplinary emergency team"
+  # حساب عمر الحمل
+  today = datetime.date.today()
+  delta = today - lmp_date
+  total_days = delta.days
+  weeks = total_days // 7
+  days = total_days % 7
 
-    elif "Infections" in selected_category or "الحمى والعدوى" in selected_category:
-        if language == "العربية":
-            diff = "- التهاب بطانة الرحم النفاسي (Puerperal Endometritis)\n- التهاب الجرح القيصري أو العجاني (Wound/Episiotomy Infection)\n- التهاب الكلى والمسالك البولية الحاد (Pyelonephritis / UTI)\n- التهاب الثدي النفاسي (Mastitis / Breast Abscess)"
-            inv = "- صورة دم كاملة (CBC) مع قياس علامات الالتهاب (CRP / Procalcitonin)\n- مزرعة بول وبكتيريا الدم عند الارتفاع الشديد للحرارة (Blood & Urine Cultures)\n- مسحة من الجرح أو إفرازات الرحم عند الإمكان"
-            mgmt = "- البدء بمضادات حيوية وريدية واسعة النطاق (Broad-spectrum IV antibiotics)\n- خافضات الحرارة والتحكم بالسوائل والترطيب\n- تصريف الجراجات أو خراجات الثدي/الجرح عند تشكيلها جراحياً"
-        else:
-            diff = "- Puerperal Endometritis\n- Cesarean or Episiotomy Wound Infection\n- Acute Pyelonephritis / Severe UTI\n- Puerperal Mastitis or Breast Abscess"
-            inv = "- Complete Blood Count (CBC) and inflammatory markers (CRP / Procalcitonin)\n- Urine culture and blood cultures if high spikes of fever occur\n- Wound or lochia swabs when clinically indicated"
-            mgmt = "- Initiate broad-spectrum IV antibiotic therapy\n- Antipyretics and supportive IV hydration\n- Surgical drainage of wound abscesses or breast collections if localized"
+  # حساب موعد الولادة المتوقع
+  try:
+    edd = lmp_date + datetime.timedelta(days=280)
+  except:
+    edd = "غير محدد"
 
-    else:  # Fetal Movement / CTG Concerns
-        if language == "العربية":
-            diff = "- ضيق أو معاناة الجنين داخل الرحم (Fetal Distress / Hypoxia)\n- فشل أو قصور المشيمة الوظيفي (Placental Insufficiency)\n- قلة السائل الامينوسي الحادة (Oligohydramnios)\n- التفاف الحبل السري أو الضغط عليه (Cord Compression)"
-            inv = "- تخطيط نبض قلب الجنين المستمر (CTG / Electronic Fetal Monitoring)\n- تصوير تلفزيوني تفصيلي وتقييم مؤشر السائل الامينوسي (AFI / Ultrasound BPP)\n- دوبلر الشريان السري والمخي الأوسط (Umbilical & Middle Cerebral Artery Doppler)"
-            mgmt = "- وضع الحامل على جانبها الأيسر وإعطاء الأكسجين عند الحاجة (Left lateral position & oxygen)\n- توقف أي منشطات للرحم قد تسبب انقباضات مفرطة (Discontinue uterotonics if any)\n- التقييم العاجل لإمكانية إنهاء الحمل وولادة طارئة (سريعة) إذا استمر النمط غير المطمئن في التخطيط"
-        else:
-            diff = "- Fetal Distress / Hypoxia\n- Placental Insufficiency\n- Severe Oligohydramnios\n- Cord compression or nuchal cord entanglement"
-            inv = "- Continuous Electronic Fetal Monitoring (CTG)\n- Detailed obstetric ultrasound and Amniotic Fluid Index (AFI / BPP)\n- Umbilical and Middle Cerebral Artery Doppler studies"
-            mgmt = "- Place mother in left lateral position and provide supplemental oxygen\n- Discontinue any uterine stimulants causing hyperstimulation\n- Urgent evaluation for emergency delivery if non-reassuring CTG persists"
+  with col2:
+    st.success(f"📌 **عمر الحمل الحالي:** {weeks} أسبوع و {days} أيام")
+    st.info(f"👶 **موعد الولادة المتوقع (EDD):** {edd}")
 
-    # عرض النتائج الكاملة في مربعات واضحة ومنظمة
-    st.success(f"**{t['differential']}**\n\n{diff}")
-    st.info(f"**{t['investigations']}**\n\n{inv}")
-    st.warning(f"**{t['management']}**\n\n{mgmt}")
+  st.markdown("---")
+  st.subheader("📋 تتبع المواعيد والفترات الحرجة في العيادة:")
+  st.write(
+      "- **الثلث الأول (0 - 13 أسبوع):** التركيز على تثبيت الحمل، الفيتامينات"
+      " الأساسية، والمسح المبكر."
+  )
+  st.write(
+      "- **الثلث الثاني (14 - 27 أسبوع):** مسح التشوهات التفصيلي (Anomaly Scan)"
+      " بين الأسبوع 18-22، ومتابعة نمو الجنين."
+  )
+  st.write(
+      "- **الثلث الثالث (28 - 40 أسبوع):** متابعة أسبوعية، قياس السائل الأمنيوسي"
+      " (AFI)، ومراقبة ضغط الدم وعلامات المخاض."
+  )
 
-else:
-    st.info(t["select_prompt"])
 
-st.divider()
-st.caption(t["warning"])
+# --- القسم الثالث: دليل الأدوية والمكملات الآمنة للحامل ---
+elif menu == "3. دليل الأدوية والمكملات الآمنة للحامل":
+  st.header("💊 دليل الأدوية المتخصصة والآمنة أثناء الحمل")
+
+  drug_category = st.selectbox(
+      "اختر تصنيف الدواء:",
+      [
+          "المضادات الحيوية ومضادات الالتهابات",
+          "أدوية الغثيان والقيء",
+          "الفيتامينات والمكملات الغذائية",
+          "أدوية الولادة وتنظيم المخاض (Uterotonics & Tocolytics)",
+      ],
+  )
+
+  if drug_category == "المضادات الحيوية ومضادات الالتهابات":
+    st.markdown("""
+        ### **المضادات الحيوية الآمنة (Category B غالباً):**
+        * **البنسلينات (Penicillins):** مثل Amoxicillin, Ampicillin (آمنة وبأمان تام في الحمل).
+        * **السيفالوسبورينات (Cephalosporins):** مثل Cefixime, Cefuroxime, Ceftriaxone.
+        * **الماكروليدات (Macrolides):** مثل Azithromycin, Erythromycin (تستخدم بديلة عند حساسية البنسلين).
+        * **مضادات الفطريات:** مثل Clotrimazole (موضعي/تحاميل المهبل آمنة في الثلث الثاني والثالث).
+        * *تحذير:* تجنب تماماً الفلوروكوينولون (Ciprofloxacin) والتتراسيكلين (Doxycycline) أثناء الحمل.
+        """)
+
+  elif drug_category == "أدوية الغثيان والقيء":
+    st.markdown("""
+        ### **علاجات الغثيان الآمنة:**
+        * **Pyridoxine (فيتامين B6):** الجرعة القياسية الأولى لتخفيف الغثيان.
+        * **Doxylamine + Pyridoxine:** تركيبة معتمدة وآمنة جداً (Category A).
+        * **Metoclopramide / Ondansetron:** تُستخدم بحذر وعند الحاجة القصوى وتحت الإشراف الطبي لحالات الغثيان الشديد (Hyperemesis Gravidarum).
+        """)
+
+  elif drug_category == "الفيتامينات والمكملات الغذائية":
+    st.markdown("""
+        ### **الأساسيات أثناء الحمل:**
+        * **حمض الفوليك (Folic Acid):** 400 ميكروغرام يومياً (ضروري خاصة في الثلث الأول لمنع تشوهات الأنبوب العصبي).
+        * **حديد (Iron Supplements):** يُصرف عادةً ابتداءً من الأسبوع 14 لمنع فقر الدم وقايةً وعلاجاً.
+        * **الكالسيوم وفيتامين د (Calcium & Vit D):** لدعم نمو عظام الجنين والحفاظ على صحة الأم.
+        """)
+
+  elif drug_category == "أدوية الولادة وتنظيم المخاض (Uterotonics & Tocolytics)":
+    st.markdown("""
+        ### **1. مقبضات ومنظمات الرحم (Uterotonics):**
+        * **Oxytocin (الأوكسايتوسين):** لتحفيز الطلق أو تقليل النزيف بعد الولادة (Postpartum Hemorrhage).
+        * **Misoprostol (ميزوبروستول):** يستخدم بحذر شديد لتحفيز نضج عنق الرحم أو علاج النزيف بناءً على البروتوكول.
+        
+        ### **2. مثبطات المخاض المبكر (Tocolytics):**
+        * **Nifedipine:** حاصر قنوات كالسيوم يستخدم لتأخير الولادة المبكرة.
+        * **Atosiban / Mag. Sulfate:** حسب الإرشادات الإكلينيكية الدقيقة لحماية الجنين.
+        """)
+
+
+# --- القسم الرابع: الفحوصات المخبرية والأشعة التلفزيونية ---
+elif menu == "4. الفحوصات المخبرية والأشعة التلفزيونية":
+  st.header("🔬 الفحوصات المخبرية والأشعة التلفزيونية (Labs & Ultrasound)")
+
+  tab1, tab2 = st.tabs(["🧪 الفحوصات المخبرية الأساسية", "📡 الأشعة التلفزيونية"])
+
+  with tab1:
+    st.markdown("""
+        ### **أهم التحاليل المخبرية للحامل:**
+        1. **صورة الدم الكاملة (CBC):** للاطمئنان على نسبة الهيموجلوبين واستبعاد فقر الدم (Anemia).
+        2. **فصيلة الدم وعامل ريسس (Blood Group & Rh):** مهم جداً لمعرفة احتياج الأم لحقنة Anti-D إذا كانت سالبة.
+        3. **سكر الحمل (Random / Fasting / GTT):** لفحص سكر الدم واستبعاد سكر الحمل (Gestational Diabetes).
+        4. **تحاليل البول والزراعة (Urinalysis & Urine Culture):** للاطمئنان على خلو المسالك البولية من الالتهابات الصامتة.
+        5. **وظائف الكلى والكبد (RFT & LFT):** في حالات ارتفاع الضغط والتسمم الحملي.
+        """)
+
+  with tab2:
+    st.markdown("""
+        ### **جدول الفحوصات بالأشعة التلفزيونية (Ultrasound Scan Guide):**
+        * **المسح المبكر (Early Scan - الأسابيع 6 إلى 10):** لتأكيد نبض الجنين، مكان الحمل (داخل الرحم)، وتحديد عمر الحمل بدقة.
+        * **الشفافية القفوية (NT Scan - الأسابيع 11 إلى 13+6):** لقياس السائل خلف رقبة الجنين وتقييم المخاطر الجينية بالاشتراك مع التحاليل.
+        * **مسح التشوهات التفصيلي (Anomaly / Detailed Scan - الأسابيع 18 إلى 22):** فحص تفصيلي لأعضاء الجنين، القلب، الدماغ، الأطراف، ومشيمة الرحم.
+        * **متابعة النمو والسائل الأمنيوسي (Growth & AFI Scan - الثلث الثالث):** لقياس حجم الجنين، تدفق الدم، وتقييم كمية السائل الأمنيوسي (AFI).
+        """)
+
+st.markdown("---")
+st.markdown("💡 *تم توثيق التطبيق وإعداد الأقسام الطبية بكل إتقان.*")
