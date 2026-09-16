@@ -39,9 +39,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ---------------- 2. القائمة الجانبية (Sidebar) ----------------
+# ---------------- 2. القائمة الجانبية (Sidebar) مع اسم الدكتورة ----------------
 st.sidebar.markdown("<h2 style='text-align: center; color: #1E3A8A;'>🩺 المساعد السريري</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #64748B;'>مرجع طبي تخصصي للنساء والتوليد</p>", unsafe_allow_html=True)
+# إضافة اسم الدكتورة بشكل مميز في الشريط الجانبي
+st.sidebar.markdown("<div style='background-color: #E0F2FE; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 15px;'><b style='color: #0369A1;'>إشراف وتطوير:<br>Dr. Aziza Mohammed</b></div>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 menu = st.sidebar.selectbox(
@@ -57,7 +59,7 @@ menu = st.sidebar.selectbox(
 
 # ---------------- 3. صفحة الرئيسية ونظرة عامة ----------------
 if menu == "🏠 الرئيسية ونظرة عامة":
-    st.markdown('<div class="main-header">أهلاً بكِ دكتورة في المساعد السريري لأمراض النساء والتوليد</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">أهلاً بكِ دكتورة عزيزة في المساعد السريري لأمراض النساء والتوليد</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -120,7 +122,7 @@ elif menu == "🧮 الحاسبات السريرية (الحمل والولاد�
             
             st.info(f"⏳ **عمر الحمل الحالي المتوقع اليوم:** {curr_w} أسبوع و {curr_d} يوم.")
 
-# ---------------- 5. محرك التشخيص الذكي للأعراض (القسم الجديد) ----------------
+# ---------------- 5. محرك التشخيص الذكي للأعراض ----------------
 elif menu == "🧠 محرك التشخيص الذكي للأعراض":
     st.markdown('<div class="main-header">🧠 محرك التشخيص السريري الذكي للأعراض والعلامات</div>', unsafe_allow_html=True)
     st.markdown("<p style='color: #64748B;'>قومي بتحديد الأعراض والعلامات السريرية التي تظهر على المريضة ليقوم النظام بتحليلها وإعطاء التشخيص المحتمل والخطة الإسعافية مباشرة.</p>", unsafe_allow_html=True)
@@ -151,7 +153,6 @@ elif menu == "🧠 محرك التشخيص الذكي للأعراض":
         
         matched_cases = 0
         
-        # تحليل الحمل خارج الرحم أو النزيف المبكر الخطير
         if sym_bleeding and sym_abig_pain and not sym_pph:
             matched_cases += 1
             st.markdown("""
@@ -165,7 +166,6 @@ elif menu == "🧠 محرك التشخيص الذكي للأعراض":
                 </div>
             """, unsafe_allow_html=True)
 
-        # تحليل تسمم الحمل الشديد
         if sym_high_bp and (sym_headache_blurry or sym_edema):
             matched_cases += 1
             st.markdown("""
@@ -173,13 +173,12 @@ elif menu == "🧠 محرك التشخيص الذكي للأعراض":
                 <h3 style="color: #D97706;">⚠️ تشخيص محتمل: تسمم الحمل الشديد (Severe Preeclampsia)</h3>
                 <p><b>الأعراض المطابقة:</b> ارتفاع ضغط الدم مع أعراض عصبية/بصرية أو تورم شديد.</p>
                 <p><b>الإجراءات الطبية الفورية:</b><br>
-                1. فحص البلت للبروتين (Proteinuria) وتقييم وظائف الكلى والكبد وصصفائح الدم.<br>
+                1. فحص البول للبروتين (Proteinuria) وتقييم وظائف الكلى والكبد وصفيحات الدم.<br>
                 2. إعطاء خافض للضغط الإسعافي إذا كان الضغط $\\ge$ 160/110 ملم زئبق (مثل Labetalol وريدياً).<br>
                 3. بدء كبريتات المغنيسيوم ($MgSO_4$) كجرعة تحميلية للوقاية من التشنجات (Eclampsia) مع مراقبة التنفس وانعكاس الرضفة.</p>
                 </div>
             """, unsafe_allow_html=True)
 
-        # تحليل نزيف ما بعد الولادة ورخاوة الرحم
         if sym_pph or sym_atonic:
             matched_cases += 1
             st.markdown("""
@@ -193,7 +192,6 @@ elif menu == "🧠 محرك التشخيص الذكي للأعراض":
                 </div>
             """, unsafe_allow_html=True)
 
-        # تحليل الإجهاض الحتمي/غير الكامل
         if sym_bleeding and sym_cervix_open:
             matched_cases += 1
             st.markdown("""
