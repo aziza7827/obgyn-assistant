@@ -20,7 +20,7 @@ if language == "العربية":
         "title": "🩺 المساعد الذكي للتشخيص التفريقي (نساء وولادة)",
         "subtitle": "نظام دعم القرار السريري الشامل للحالات الطارئة والتشخيص التفريقي",
         "sidebar_header": "إعدادات وتقييم الحالة الإكلينيكية",
-        "category_label": "اختر فئة العرض الإكلينيكي:",
+        "category_label": "اختر ففة العرض الإكلينيكي:",
         "categories": [
             "نزيف أول الحمل (First Trimester Bleeding)",
             "آلام البطن والحوض الحادة (Acute Abdominal/Pelvic Pain)",
@@ -194,6 +194,7 @@ if analyze_clicked:
         if language == "العربية":
             diff = "- التهاب الزائدة الدودية الحاد (Acute Appendicitis - يتغير مكانها بالحمل)\n- التواء المبيض أو الأنبوب (Ovarian/Adnexal Torsion)\n- تمزق أو نزيف كيس المبيض (Ruptured Ovarian Cyst)\n- التهاب الحوض الحاد أو تفاقم حصوات المرارة/الكلى"
             inv = "- سونار دوبلر حوضي وبطني (Pelvic & Abdominal Doppler US)\n- صورة دم كاملة (CBC)، تحليل بول (Urinalysis)، ووظائف الكلى\n- استشارة جراحية مبكرة عند الشك في جراحة بطنية حادة"
+            mgmt = "- السيطرة على الألم، الإماهة الوريدية الموجهة، والمراقبة السريرية الحثيثة\n- التدخل الجراحي/النسائي العاجل بناءً على نتائج الدوبلر، العلامات البريتونية، والتقييم الإكلينيكي"
         else:
             diff = "- Acute Appendicitis (position alters during pregnancy)\n- Ovarian or Adnexal Torsion\n- Ruptured or Hemorrhagic Ovarian Cyst\n- Pelvic Inflammatory Disease (PID) or acute biliary/renal colic"
             inv = "- Pelvic & Abdominal Doppler Ultrasound\n- Complete Blood Count (CBC), Urinalysis, Renal Profile\n- Early surgical consultation if acute abdomen is suspected"
@@ -203,11 +204,10 @@ if analyze_clicked:
         if language == "العربية":
             diff = "- تسمم الحمل (Pre-eclampsia) بعلامات خطورة أو بدونها\n- ارتفاع ضغط الدم المزمن أو الحملي العابر\n- متلازمة هيلپ (HELLP Syndrome)\n- تشنج الحمل (Eclampsia)"
             inv = "- فحص زلال البول (Spot Urine Protein-to-Creatinine Ratio أو جمع بول 24 ساعة)\n- وظائف الكبد والكلى (AST, ALT, Serum Creatinine, Bilirubin)\n- تعداد الصفائح الدموية واختبارات التخثر\n- تقييم صحة الجنين (NST وسونار قياس السوائل ونمو الجنين)"
+            mgmt = "- بدء خافضات ضغط الدم السريعة (مثل Labetalol أو Nifedipine oral) إذا كان الضغط >= 160/110 مم زئبق\n- إعطاء كبريتات المغنيسيوم (MgSO4) للوقاية أو علاج التشنجات في حالات تسمم الحمل الشديد\n- تحديد توقيت وطريقة الولادة المثلى بناءً على عمر الحمل واستقرار الحالة الأمومية والجنينية"
         else:
             diff = "- Pre-eclampsia (with or without severe features)\n- Chronic or Gestational Hypertension\n- HELLP Syndrome\n- Eclampsia"
             inv = "- Urine protein evaluation (Spot Protein/Creatinine Ratio or 24-hr collection)\n- Liver and renal function tests (AST, ALT, Creatinine, Bilirubin)\n- Platelet count and coagulation profile\n- Fetal well-being assessment (NST, biophysical profile)"
-            mgmt = "- بدء خافضات ضغط الدم السريعة (مثل Labetalol أو Nifedipine oral) إذا كان الضغط >= 160/110 مم زئبق\n- إعطاء كبريتات المغنيسيوم (MgSO4) للوقاية أو علاج التشنجات في حالات تسمم الحمل الشديد\n- تحديد توقيت وطريقة الولادة المثلى بناءً على عمر الحمل واستقرار الحالة الأمومية والجنينية"
-        else:
             mgmt = "- Administer acute antihypertensives (e.g., Labetalol or Nifedipine) if BP >= 160/110 mmHg\n- Administer Magnesium Sulfate (MgSO4) for seizure prophylaxis/treatment in severe pre-eclampsia\n- Determine optimal timing and mode of delivery based on gestational age and maternal/fetal stability"
             
     elif "PPH" in selected_category or "نزيف ما بعد الولادة" in selected_category:
@@ -224,22 +224,20 @@ if analyze_clicked:
         if language == "العربية":
             diff = "- التهاب بطانة الرحم النفاسي (Puerperal Endometritis)\n- التهاب الجرح القيصري أو العجاني (Wound/Episiotomy Infection)\n- التهاب الكلى والمسالك البولية الحاد (Pyelonephritis / UTI)\n- التهاب الثدي النفاسي (Mastitis / Breast Abscess)"
             inv = "- صورة دم كاملة (CBC) مع قياس علامات الالتهاب (CRP / Procalcitonin)\n- مزرعة بول وبكتيريا الدم عند الارتفاع الشديد للحرارة (Blood & Urine Cultures)\n- مسحة من الجرح أو إفرازات الرحم عند الإمكان"
+            mgmt = "- البدء بمضادات حيوية وريدية واسعة النطاق (Broad-spectrum IV antibiotics)\n- خافضات الحرارة والتحكم بالسوائل والترطيب\n- تصريف الجراجات أو خراجات الثدي/الجرح عند تشكيلها جراحياً"
         else:
             diff = "- Puerperal Endometritis\n- Cesarean or Episiotomy Wound Infection\n- Acute Pyelonephritis / Severe UTI\n- Puerperal Mastitis or Breast Abscess"
             inv = "- Complete Blood Count (CBC) and inflammatory markers (CRP / Procalcitonin)\n- Urine culture and blood cultures if high spikes of fever occur\n- Wound or lochia swabs when clinically indicated"
-            mgmt = "- البدء بمضادات حيوية وريدية واسعة النطاق (Broad-spectrum IV antibiotics)\n- خافضات الحرارة والتحكم بالسوائل والترطيب\n- تصريف الجراجات أو خراجات الثدي/الجرح عند تشكيلها جراحياً"
-        else:
             mgmt = "- Initiate broad-spectrum IV antibiotic therapy\n- Antipyretics and supportive IV hydration\n- Surgical drainage of wound abscesses or breast collections if localized"
 
     else:  # Fetal Movement / CTG Concerns
         if language == "العربية":
             diff = "- ضيق أو معاناة الجنين داخل الرحم (Fetal Distress / Hypoxia)\n- فشل أو قصور المشيمة الوظيفي (Placental Insufficiency)\n- قلة السائل الامينوسي الحادة (Oligohydramnios)\n- التفاف الحبل السري أو الضغط عليه (Cord Compression)"
             inv = "- تخطيط نبض قلب الجنين المستمر (CTG / Electronic Fetal Monitoring)\n- تصوير تلفزيوني تفصيلي وتقييم مؤشر السائل الامينوسي (AFI / Ultrasound BPP)\n- دوبلر الشريان السري والمخي الأوسط (Umbilical & Middle Cerebral Artery Doppler)"
+            mgmt = "- وضع الحامل على جانبها الأيسر وإعطاء الأكسجين عند الحاجة (Left lateral position & oxygen)\n- توقف أي منشطات للرحم قد تسبب انقباضات مفرطة (Discontinue uterotonics if any)\n- التقييم العاجل لإمكانية إنهاء الحمل وولادة طارئة (سريعة) إذا استمر النمط غير المطمئن في التخطيط"
         else:
             diff = "- Fetal Distress / Hypoxia\n- Placental Insufficiency\n- Severe Oligohydramnios\n- Cord compression or nuchal cord entanglement"
             inv = "- Continuous Electronic Fetal Monitoring (CTG)\n- Detailed obstetric ultrasound and Amniotic Fluid Index (AFI / BPP)\n- Umbilical and Middle Cerebral Artery Doppler studies"
-            mgmt = "- وضع الحامل على جانبها الأيسر وإعطاء الأكسجين عند الحاجة (Left lateral position & oxygen)\n- توقف أي منشطات للرحم قد تسبب انقباضات مفرطة (Discontinue uterotonics if any)\n- التقييم العاجل لإمكانية إنهاء الحمل وولادة طارئة (سريعة) إذا استمر النمط غير المطمئن في التخطيط"
-        else:
             mgmt = "- Place mother in left lateral position and provide supplemental oxygen\n- Discontinue any uterine stimulants causing hyperstimulation\n- Urgent evaluation for emergency delivery if non-reassuring CTG persists"
 
     # عرض النتائج الكاملة في مربعات واضحة ومنظمة
