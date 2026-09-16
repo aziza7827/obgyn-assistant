@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 # ---------------- 1. إعدادات الصفحة والتصميم العام (CSS) ----------------
 st.set_page_config(
@@ -49,6 +49,7 @@ menu = st.sidebar.selectbox(
     [
         "🏠 الرئيسية ونظرة عامة",
         "🧮 الحاسبات السريرية (الحمل والولادة)",
+        "🧠 محرك التشخيص الذكي للأعراض",
         "🔍 التشخيص التفريقي الطارئ",
         "💊 دليل الأدوية والجرعات السريرية"
     ]
@@ -72,8 +73,9 @@ if menu == "🏠 الرئيسية ونظرة عامة":
             <div class="card">
             <h3>⚙️ الأقسام المتاحة</h3>
             <p><b>1. الحاسبات السريرية:</b> لحساب عمر الحمل وموعد الولادة المتوقع بدقة.<br>
-            <b>2. التشخيص التفريقي:</b> خطوات منظمة للتعامل مع طوارئ النزيف وآلام البطن وتسمم الحمل.<br>
-            <b>3. دليل الأدوية الشامل:</b> مرجع موسع يضم الأدوية، الجرعات، ومحاذير الاستخدام أثناء الحمل.</p>
+            <b>2. محرك التشخيص الذكي:</b> إدخال الأعراض والعلامات للحصول على التشخيص المحتمل فوراً.<br>
+            <b>3. التشخيص التفريقي الطارئ:</b> خطوات منظمة للتعامل مع الطوارئ.<br>
+            <b>4. دليل الأدوية الشامل:</b> مرجع موسع يضم الأدوية، الجرعات، ومحاذير الاستخدام أثناء الحمل.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -97,9 +99,6 @@ elif menu == "🧮 الحاسبات السريرية (الحمل والولاد�
             else:
                 weeks = total_days // 7
                 days = total_days % 7
-                
-                # حساب موعد الولادة المتوقع (قاعدة نيجل: LMP + 7 days - 3 months + 1 year)
-                from datetime import timedelta
                 edd = lmp_date + timedelta(days=280)
                 
                 st.success(f"📅 **موعد الولادة المتوقع (EDD):** {edd.strftime('%Y-%m-%d')}")
@@ -112,7 +111,6 @@ elif menu == "🧮 الحاسبات السريرية (الحمل والولاد�
         scan_date = st.date_input("تاريخ إجراء السونار:", value=date.today())
         
         if st.button("حساب العمر الحالي المتوقع"):
-            from datetime import timedelta
             scan_total_days = (us_weeks * 7) + us_days
             days_passed = (date.today() - scan_date).days
             current_total_days = scan_total_days + days_passed
@@ -122,7 +120,96 @@ elif menu == "🧮 الحاسبات السريرية (الحمل والولاد�
             
             st.info(f"⏳ **عمر الحمل الحالي المتوقع اليوم:** {curr_w} أسبوع و {curr_d} يوم.")
 
-# ---------------- 5. التشخيص التفريقي الطارئ ----------------
+# ---------------- 5. محرك التشخيص الذكي للأعراض (القسم الجديد) ----------------
+elif menu == "🧠 محرك التشخيص الذكي للأعراض":
+    st.markdown('<div class="main-header">🧠 محرك التشخيص السريري الذكي للأعراض والعلامات</div>', unsafe_allow_html=True)
+    st.markdown("<p style='color: #64748B;'>قومي بتحديد الأعراض والعلامات السريرية التي تظهر على المريضة ليقوم النظام بتحليلها وإعطاء التشخيص المحتمل والخطة الإسعافية مباشرة.</p>", unsafe_allow_html=True)
+    
+    with st.form("diagnostic_form"):
+        st.subheader("حدد الأعراض والعلامات الملاحظة:")
+        
+        col_f1, col_f2 = st.columns(2)
+        with col_f1:
+            sym_bleeding = st.checkbox("نزيف مهبلي (Vaginal Bleeding)")
+            sym_abig_pain = st.checkbox("ألم شديد في البطن أو الحوض (Severe Abdominal/Pelvic Pain)")
+            sym_high_bp = st.checkbox("ارتفاع ضغط الدم (BP ≥ 140/90 mmHg)")
+            sym_headache_blurry = st.checkbox("صداع شديد أو زغللة في الرؤية (Severe Headache / Blurry Vision)")
+            sym_fever = st.checkbox("ارتفاع درجة الحرارة / حمى (Fever)")
+        
+        with col_f2:
+            sym_pph = st.checkbox("نزيف غزير بعد الولادة (Postpartum Hemorrhage)")
+            sym_atonic = st.checkbox("رخاوة وعدم انقباض الرحم بعد الولادة (Atonic Uterus)")
+            sym_vomiting = st.checkbox("غثيان وقيء مستمر وشديد (Hyperemesis / Severe Vomiting)")
+            sym_edema = st.checkbox("تورم واستمساء عام (Generalized Edema / Face & Hands)")
+            sym_cervix_open = st.checkbox("عنق الرحم مفتوح أثناء النزيف (Open Cervix in Early Pregnancy)")
+
+        submit_diagnosis = st.form_submit_button("تحليل الأعراض وإظهار التشخيص")
+
+    if submit_diagnosis:
+        st.markdown("---")
+        st.subheader("📋 نتائج التشخيص التفريقي والخطوات السريرية:")
+        
+        matched_cases = 0
+        
+        # تحليل الحمل خارج الرحم أو النزيف المبكر الخطير
+        if sym_bleeding and sym_abig_pain and not sym_pph:
+            matched_cases += 1
+            st.markdown("""
+                <div class="card" style="border-right-color: #DC2626;">
+                <h3 style="color: #DC2626;">🚨 تشخيص محتمل عالي الخطورة: الحمل خارج الرحم (Ectopic Pregnancy) أو إجهاض منذر/منسد</h3>
+                <p><b>الأعراض المطابقة:</b> نزيف مهبلي + ألم شديد في البطن/الحوض.</p>
+                <p><b>الإجراءات الطبية الفورية:</b><br>
+                1. تركيب خط وريدي (IV Line) وسحب دم لفحص فصيلة الدم (Blood Group & Rh) وصورة الدم الكاملة (CBC).<br>
+                2. إجراء موجات فوق صوتية فورية (Pelvic/Transvaginal US) للتأكد من وجود كيس الحمل داخل الرحم.<br>
+                3. في حال تأكيد الحمل خارج الرحم والمريضة غير مستقرة: تحويل فوري للجراحة الطارئة.</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # تحليل تسمم الحمل الشديد
+        if sym_high_bp and (sym_headache_blurry or sym_edema):
+            matched_cases += 1
+            st.markdown("""
+                <div class="card" style="border-right-color: #D97706;">
+                <h3 style="color: #D97706;">⚠️ تشخيص محتمل: تسمم الحمل الشديد (Severe Preeclampsia)</h3>
+                <p><b>الأعراض المطابقة:</b> ارتفاع ضغط الدم مع أعراض عصبية/بصرية أو تورم شديد.</p>
+                <p><b>الإجراءات الطبية الفورية:</b><br>
+                1. فحص البلت للبروتين (Proteinuria) وتقييم وظائف الكلى والكبد وصصفائح الدم.<br>
+                2. إعطاء خافض للضغط الإسعافي إذا كان الضغط $\\ge$ 160/110 ملم زئبق (مثل Labetalol وريدياً).<br>
+                3. بدء كبريتات المغنيسيوم ($MgSO_4$) كجرعة تحميلية للوقاية من التشنجات (Eclampsia) مع مراقبة التنفس وانعكاس الرضفة.</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # تحليل نزيف ما بعد الولادة ورخاوة الرحم
+        if sym_pph or sym_atonic:
+            matched_cases += 1
+            st.markdown("""
+                <div class="card" style="border-right-color: #DC2626;">
+                <h3 style="color: #DC2626;">🚨 حالة طوارئ توليدية: نزيف ما بعد الولادة (PPH due to Atonic Uterus)</h3>
+                <p><b>الأعراض المطابقة:</b> نزيف غزير ورخاوة الرحم بعد الولادة.</p>
+                <p><b>الإجراءات الطبية الفورية (قاعدة 4 Ts):</b><br>
+                1. طلب المساعدة واستدعاء فريق الطوارئ، إعطاء أكسجين قناع وجه، وفتح خطين وريديين بمقاس واسع (16G/18G).<br>
+                2. إجراء تدليك رحمي مستمر (Bimanual Uterine Massage).<br>
+                3. إعطاء الأوكسيتوسين وريدياً/عضلياً، وميسوبروستول مستقيماً، والميثيل إرغومترين (إن لم تكن المريضة مصابة بارتفاع الضغط).</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # تحليل الإجهاض الحتمي/غير الكامل
+        if sym_bleeding and sym_cervix_open:
+            matched_cases += 1
+            st.markdown("""
+                <div class="card" style="border-right-color: #2563EB;">
+                <h3>🔍 تشخيص محتمل: إجهاض حتمي أو غير كامل (Inevitable / Incomplete Abortion)</h3>
+                <p><b>الأعراض المطابقة:</b> نزيف مهبلي مع انفتاح عنق الرحم.</p>
+                <p><b>الإجراءات الطبية الفورية:</b><br>
+                1. إجراء سونار لتقييم محتويات الرحم وبقايا الحمل.<br>
+                2. تحضير المريضة لتفريغ الرحم (Evacuation/Curettage أو استخدام الأدوية مثل Misoprostol حسب الحالة والعمر الحملي) وإعطاء مضاد حيوي وقائي وتحليل Rh (وإعطاء Anti-D إذا كانت الأم Rh Negative).</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+        if matched_cases == 0:
+            st.info("الرجاء اختيار مجموعة أعراض متناسقة للحصول على التشخيص الدقيق، أو مراجعة قسم التشخيص التفريقي الطارئ للمزيد من التفاصيل.")
+
+# ---------------- 6. التشخيص التفريقي الطارئ ----------------
 elif menu == "🔍 التشخيص التفريقي الطارئ":
     st.markdown('<div class="main-header">🔍 المساعد الذكي للتشخيص التفريقي الإسعافي</div>', unsafe_allow_html=True)
     
@@ -155,7 +242,7 @@ elif menu == "🔍 التشخيص التفريقي الطارئ":
             <b>2. الأسباب الأربعة (4 Ts):</b><br>
                - <b>رخاوة الرحم (Tone - Atonic Uterus):</b> السبب الأهم (يمثل 70-80% من الحالات). التعامل: تدليك الرحم اليدوي، إعطاء الأوكسيتوسين، ميثيل إرغومترين (إن لم يوجد ضغط مرتفع)، والميسوبروستول.<br>
                - <b>بقايا المشيمة (Tissue):</b> التأكد من خروج المشيمة كاملة وإجراء تنظيف يدوي إن لزم الأمر.<br>
-               - <b>الإصابات وتمزقات قناة الولادة (Trauma):</b> فحص دقيق لعنق الرحم والمهد وعمل خياطة جراحية للتمزقات.<br>
+               - <b>الإصابات وتمزقات قناة الولادة (Trauma):</b> فحص دقيق لعنق الرحم والمهبل وعمل خياطة جراحية للتمزقات.<br>
                - <b>اضطرابات التجلط (Thrombin):</b> فحص وظائف التجلط، نسب الفيبرينوجين، وإعطاء مشتقات الدم عند الحاجة.</p>
             </div>
         """, unsafe_allow_html=True)
@@ -170,7 +257,7 @@ elif menu == "🔍 التشخيص التفريقي الطارئ":
             </div>
         """, unsafe_allow_html=True)
 
-# ---------------- 6. دليل الأدوية والجرعات السريرية (الموسع والشامل) ----------------
+# ---------------- 7. دليل الأدوية والجرعات السريرية ----------------
 elif menu == "💊 دليل الأدوية والجرعات السريرية":
     st.markdown('<div class="main-header">💊 الدليل السريري الشامل لأدوية النساء والتوليد</div>', unsafe_allow_html=True)
 
@@ -231,7 +318,7 @@ elif menu == "💊 دليل الأدوية والجرعات السريرية":
             </div>
             
             <div class="card">
-            <h3>2. أاتوسيبان (Atosiban):</h3>
+            <h3>2. أتوسيبان (Atosiban):</h3>
             <p><b>الاستخدام:</b> مضاد لمستقبلات الأوكسيتوسين (الأكثر أماناً قلبياً للأم).</p>
             <p><b>الجرعة:</b> حقنة وريدية تحميلية تليها تسريب مستمر حسب البروتوكول.</p>
             </div>
