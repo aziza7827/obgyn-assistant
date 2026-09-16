@@ -8,6 +8,10 @@ st.set_page_config(
     layout="wide",
 )
 
+# تهيئة تخزين الحالات المحفوظة في الجلسة للمفضلة
+if 'favorites' not in st.session_state:
+  st.session_state.favorites = []
+
 # تخصيص الألوان والتصميم (CSS Custom Styling)
 st.markdown(
     """
@@ -55,6 +59,7 @@ if lang == "العربية":
       "3. حسابات وتتبع مراحل الحمل",
       "4. دليل الأدوية والمثبتات الشامل",
       "5. الفحوصات المخبرية والأشعة التلفزيونية",
+      "6. الحالات المحفوظة والمفضلة ⭐",
   ]
 else:
   title_text = "🩺 Advanced OB/GYN Clinical Assistant"
@@ -69,6 +74,7 @@ else:
       "3. Pregnancy Calculations & Tracking",
       "4. Comprehensive Medication & Progesterone Guide",
       "5. Labs & Ultrasound Guide",
+      "6. Saved Cases & Favorites ⭐",
   ]
 
 st.title(title_text)
@@ -79,9 +85,10 @@ menu = st.sidebar.selectbox(menu_label, menu_options)
 # ==========================================
 # 1. التشخيص التفريقي للحالات الطارئة
 # ==========================================
-if (menu == "1. التشخيص التفريقي للحالات الطارئة") or (
-    menu == "1. Emergency Differential Diagnosis"
-):
+if menu in [
+    "1. التشخيص التفريقي للحالات الطارئة",
+    "1. Emergency Differential Diagnosis",
+]:
   if lang == "العربية":
     st.header("🚨 التشخيص التفريقي الشامل للحالات الطارئة")
     emergency_type = st.selectbox(
@@ -116,6 +123,12 @@ if (menu == "1. التشخيص التفريقي للحالات الطارئة") 
             </ol>
             </div>
             """, unsafe_allow_html=True)
+      if st.button("حفظ هذه الحالة في المفضلة"):
+        item_text = "حمل خارج الرحم / نزيف أول الحمل"
+        if item_text not in st.session_state.favorites:
+          st.session_state.favorites.append(item_text)
+          st.success("تمت الإضافة للمفضلة بنجاح!")
+
     elif (
         emergency_type
         == "آلام البطن الحادة وحالات البطن الجراحي (Acute Abdomen)"
@@ -130,6 +143,12 @@ if (menu == "1. التشخيص التفريقي للحالات الطارئة") 
             </ul>
             </div>
             """, unsafe_allow_html=True)
+      if st.button("حفظ هذه الحالة في المفضلة"):
+        item_text = "آلام البطن الحادة / انفتال المبيض أو الزائدة"
+        if item_text not in st.session_state.favorites:
+          st.session_state.favorites.append(item_text)
+          st.success("تمت الإضافة للمفضلة بنجاح!")
+
     elif (
         emergency_type
         == "ارتفاع ضغط الدم الخطير وتسمم الحمل (Severe Preeclampsia & Eclampsia)"
@@ -144,6 +163,12 @@ if (menu == "1. التشخيص التفريقي للحالات الطارئة") 
             </ul>
             </div>
             """, unsafe_allow_html=True)
+      if st.button("حفظ هذه الحالة في المفضلة"):
+        item_text = "تسمم الحمل الشديد وطوارئ الضغط"
+        if item_text not in st.session_state.favorites:
+          st.session_state.favorites.append(item_text)
+          st.success("تمت الإضافة للمفضلة بنجاح!")
+
     elif emergency_type == "النزيف التالي للولادة (Postpartum Hemorrhage - PPH)":
       st.markdown("""
             <div class="card">
@@ -156,8 +181,12 @@ if (menu == "1. التشخيص التفريقي للحالات الطارئة") 
             </ul>
             </div>
             """, unsafe_allow_html=True)
+      if st.button("حفظ هذه الحالة في المفضلة"):
+        item_text = "النزيف التالي للولادة (PPH)"
+        if item_text not in st.session_state.favorites:
+          st.session_state.favorites.append(item_text)
+          st.success("تمت الإضافة للمفضلة بنجاح!")
   else:
-    # النسخة الإنجليزية للطوارئ
     st.header("🚨 Comprehensive Emergency Differential Diagnosis")
     emergency_type = st.selectbox(
         "Select Emergency Condition:",
@@ -217,9 +246,10 @@ if (menu == "1. التشخيص التفريقي للحالات الطارئة") 
 # ==========================================
 # 2. التشخيص السريع عبر الأعراض والعلامات
 # ==========================================
-elif (menu == "2. التشخيص السريع عبر الأعراض والعلامات") or (
-    menu == "2. Symptom-Based Quick Diagnosis"
-):
+elif menu in [
+    "2. التشخيص السريع عبر الأعراض والعلامات",
+    "2. Symptom-Based Quick Diagnosis",
+]:
   if lang == "العربية":
     st.header("⚡ القسم التفاعلي: التشخيص السريع عبر الأعراض والعلامات")
     st.markdown(
@@ -236,7 +266,7 @@ elif (menu == "2. التشخيص السريع عبر الأعراض والعلا
       sym_bp = st.checkbox("ارتفاع ضغط الدم (High BP / Edema)")
       sym_vomit = st.checkbox("غثيان وقيء مستمر (Severe Nausea/Vomiting)")
       sym_discharge = st.checkbox(
-          "إفرازات مهعضية غير طبيعية / حكة (Abnormal Discharge)"
+          "إفرازات مهبلية غير طبيعية / حكة (Abnormal Discharge)"
       )
 
     st.markdown("---")
@@ -328,9 +358,10 @@ elif (menu == "2. التشخيص السريع عبر الأعراض والعلا
 # ==========================================
 # 3. حسابات وتتبع مراحل الحمل
 # ==========================================
-elif (menu == "3. حسابات وتتبع مراحل الحمل") or (
-    menu == "3. Pregnancy Calculations & Tracking"
-):
+elif menu in [
+    "3. حسابات وتتبع مراحل الحمل",
+    "3. Pregnancy Calculations & Tracking",
+]:
   if lang == "العربية":
     st.header("📅 حسابات وتتبع مراحل الحمل (Pregnancy Calculator & Timeline)")
 
@@ -375,7 +406,7 @@ elif (menu == "3. حسابات وتتبع مراحل الحمل") or (
             <li><b>الثلث الثاني (Second Trimester - من الأسبوع 14 إلى 27):</b>
                 <ul>
                     <li>إجراء مسح التشوهات التفصيلي (Anomaly Scan) بين الأسبوع 18-22.</li>
-                    <li>بدء مكملات الحديد والكالسيوم ومتابعة نمو الجنين وحركة الحنين.</li>
+                    <li>بدء مكملات الحديد والكالسيوم ومتابعة نمو الجنين وحركة الجنين.</li>
                 </ul>
             </li>
             <br>
@@ -434,9 +465,10 @@ elif (menu == "3. حسابات وتتبع مراحل الحمل") or (
 # ==========================================
 # 4. دليل الأدوية والمثبتات الشامل
 # ==========================================
-elif (menu == "4. دليل الأدوية والمثبتات الشامل") or (
-    menu == "4. Comprehensive Medication & Progesterone Guide"
-):
+elif menu in [
+    "4. دليل الأدوية والمثبتات الشامل",
+    "4. Comprehensive Medication & Progesterone Guide",
+]:
   if lang == "العربية":
     st.header("💊 دليل الأدوية التخصصية ومثبتات الحمل الشامل")
     drug_sec = st.selectbox(
@@ -537,7 +569,6 @@ elif (menu == "4. دليل الأدوية والمثبتات الشامل") or (
             </div>
             """, unsafe_allow_html=True)
   else:
-    # النسخة الإنجليزية للأدوية
     st.header("💊 Comprehensive Medication & Progesterone Guide")
     drug_sec = st.selectbox(
         "Select Medication Category:",
@@ -629,9 +660,10 @@ elif (menu == "4. دليل الأدوية والمثبتات الشامل") or (
 # ==========================================
 # 5. الفحوصات المخبرية والأشعة التلفزيونية
 # ==========================================
-elif (menu == "4. الفحوصات المخبرية والأشعة التلفزيونية") or (
-    menu == "5. Labs & Ultrasound Guide"
-):
+elif menu in [
+    "5. الفحوصات المخبرية والأشعة التلفزيونية",
+    "5. Labs & Ultrasound Guide",
+]:
   if lang == "العربية":
     st.header("🔬 الفحوصات المخبرية والأشعة التلفزيونية")
     tab1, tab2 = st.tabs(["🧪 التحاليل المخبرية الأساسية", "📡 جدول الأشعة التلفزيونية"])
@@ -643,7 +675,7 @@ elif (menu == "4. الفحوصات المخبرية والأشعة التلفز�
                 <li><b>صورة الدم الكاملة (CBC):</b> استبعاد فقر الدم وتقييم الهيموجلوبين.</li>
                 <li><b>فصيلة الدم وعامل ريسس (Blood Group & Rh):</b> لتحديد الحاجة لحقنة Anti-D في حال كانت الأم سالب والطفل موجب.</li>
                 <li><b>تحليل السكر (Fasting / Random / GTT):</b> لاستبعاد سكر الحمل (Gestational Diabetes).</li>
-                <li><b>تحليل وبول وزراعة (Urinalysis & Urine Culture):</b> لاستبعاد التهابات المسالك البولية الصامتة.</li>
+                <li><b>تحليل بول وزراعة (Urinalysis & Urine Culture):</b> لاستبعاد التهابات المسالك البولية الصامتة.</li>
                 <li><b>وظائف الكلى والكبد (RFT & LFT):</b> ضرورية في حالات الاشتباه بارتفاع الضغط وتسمم الحمل.</li>
             </ol>
             </div>
@@ -688,6 +720,34 @@ elif (menu == "4. الفحوصات المخبرية والأشعة التلفز�
             </ul>
             </div>
             """, unsafe_allow_html=True)
+
+# ==========================================
+# 6. الحالات المحفوظة والمفضلة ⭐
+# ==========================================
+elif menu in ["6. الحالات المحفوظة والمفضلة ⭐", "6. Saved Cases & Favorites ⭐"]:
+  if lang == "العربية":
+    st.header("⭐ الحالات والتشخيصات المحفوظة للمفضلة")
+    if len(st.session_state.favorites) == 0:
+      st.info(
+          "لا توجد حالات محفوظة حالياً. يمكنك حفظ أي حالة طارئة من قسم الحالات"
+          " الطارئة بالضغط على زر الحفظ."
+      )
+    else:
+      for idx, fav in enumerate(st.session_state.favorites):
+        st.write(f"{idx + 1}. **{fav}**")
+      if st.button("مسح قائمة الحالات المحفوظة"):
+        st.session_state.favorites = []
+        st.rerun()
+  else:
+    st.header("⭐ Saved Clinical Cases & Favorites")
+    if len(st.session_state.favorites) == 0:
+      st.info("No saved cases yet. You can add cases from the Emergency section.")
+    else:
+      for idx, fav in enumerate(st.session_state.favorites):
+        st.write(f"{idx + 1}. **{fav}**")
+      if st.button("Clear Saved Cases"):
+        st.session_state.favorites = []
+        st.rerun()
 
 st.markdown("---")
 if lang == "العربية":
